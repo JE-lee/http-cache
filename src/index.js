@@ -77,7 +77,8 @@ module.exports =  class HttpGCache{
     for(let [key, { url, method, payload }] of this.store){
       if(callback(url, payload, method)){
         httpConfigs.push(this.store.get(key))
-        this.store.delete(key)
+        //this.store.delete(key)
+        this.remove(key)
       }
     }
     return httpConfigs
