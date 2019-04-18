@@ -1245,11 +1245,14 @@
      * payload 相当于GET请求的params
      */
     removeFilter(callback){
+      let httpConfigs = [];
       for(let [key, { url, method, payload }] of this.store){
         if(callback(url, payload, method)){
+          httpConfigs.push(this.store.get(key));
           this.store.delete(key);
         }
       }
+      return httpConfigs
     }
     get size(){
       return this.store.size
