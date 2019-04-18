@@ -1212,7 +1212,8 @@ var src =  class HttpGCache{
       // 发起真正的请求
       promise,
       // 设定超时
-      timerid: this.timer.setTimeout(() => this.remove(key),maxAge * 1000)
+      timerid: this.timer.setTimeout(() => this.remove(key),maxAge * 1000),
+      request
     });
     return promise
   }
