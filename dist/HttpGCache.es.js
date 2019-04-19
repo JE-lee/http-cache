@@ -1135,7 +1135,7 @@ class OneTimer{
       // if need to startTimer
       if(index == 0){
         clearTimeout(this.onlyTimer);
-        !this.line.isEmpty() && this.startTimer(Date.now() - node$1.id + node$1.delta);
+        !this.line.isEmpty() && this.startTimer(node$1.id - Date.now() + node$1.delta);
         this.$$removedHead = this.$$callbacking;
       }
     }
@@ -1165,6 +1165,18 @@ class OneTimer{
     }, delay);
     this.emitEvent('timeout', [delay]);
   }
+  get linkedline(){
+    return this.line.toArray()
+  }
+  pause(){
+    clearTimeout(this.onlyTimer);
+  }
+  restart(){
+    if(!this.line.isEmpty()){
+      this.startTimer(this.line.head.value.id - Date.now());
+    }
+  }
+
 }
 
 // inherit EventEmitter
@@ -1216,6 +1228,7 @@ var src =  class HttpGCache{
       promise,
       // 设定超时
       timerid: this.timer.setTimeout(() => this.remove(key),maxAge * 1000),
+      start: Date.now(),
       request
     });
     return promise
@@ -1249,7 +1262,6 @@ var src =  class HttpGCache{
     for(let [key, { url, method, payload }] of this.store){
       if(callback(url, payload, method)){
         httpConfigs.push(this.store.get(key));
-        //this.store.delete(key)
         this.remove(key);
       }
     }
@@ -1257,6 +1269,16 @@ var src =  class HttpGCache{
   }
   get size(){
     return this.store.size
+  }
+  clear(){
+    this.store.clear();
+    this.timer.pause();
+  }
+  pause(){
+    this.timer.pause();
+  }
+  restart(){
+    this.timer.restart();
   }
 };
 

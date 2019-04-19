@@ -44,6 +44,7 @@ module.exports =  class HttpGCache{
       promise,
       // 设定超时
       timerid: this.timer.setTimeout(() => this.remove(key),maxAge * 1000),
+      start: Date.now(),
       request
     })
     return promise
@@ -77,7 +78,6 @@ module.exports =  class HttpGCache{
     for(let [key, { url, method, payload }] of this.store){
       if(callback(url, payload, method)){
         httpConfigs.push(this.store.get(key))
-        //this.store.delete(key)
         this.remove(key)
       }
     }
@@ -85,5 +85,15 @@ module.exports =  class HttpGCache{
   }
   get size(){
     return this.store.size
+  }
+  clear(){
+    this.store.clear()
+    this.timer.pause()
+  }
+  pause(){
+    this.timer.pause()
+  }
+  restart(){
+    this.timer.restart()
   }
 }
